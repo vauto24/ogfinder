@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ontario Grant Finder — Find Funding Your Business Qualifies For</title>
+  <meta name="description" content="Get a personalized report of Ontario and federal grants, tax credits, and funding programs your business qualifies for — generated in seconds." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #0F6E56;
+      --green-light: #E1F5EE;
+      --green-mid: #1D9E75;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #fafaf8;
+      --white: #ffffff;
+      --red: #A32D2D;
+      --red-light: #FCEBEB;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--green);
+      text-decoration: none;
+    }
+    .nav-badge {
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--green-light);
+      color: var(--green);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: var(--green-light);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.2;
+      color: var(--text);
+      max-width: 700px;
+      margin: 0 auto 1.25rem;
+    }
+    .hero p {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--green);
+      display: block;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* MAIN LAYOUT */
+    .main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* FORM CARD */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.75rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color 0.15s;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.1);
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    /* SUBMIT */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .submit-btn:hover { background: #0d5e49; }
+    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
+
+    /* LOADING */
+    .loading {
+      display: none;
+      align-items: center;
+      gap: 14px;
+      padding: 1.5rem 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .loading.visible { display: flex; }
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ERROR */
+    .error-msg {
+      display: none;
+      padding: 12px 16px;
+      background: var(--red-light);
+      border-radius: 8px;
+      color: var(--red);
+      font-size: 13px;
+      margin-top: 1rem;
+    }
+    .error-msg.visible { display: block; }
+
+    /* REPORT */
+    .report-card {
+      display: none;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-top: 2rem;
+    }
+    .report-card.visible { display: block; }
+    .report-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .report-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--text);
+    }
+    .report-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .report-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .action-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text);
+      transition: background 0.15s;
+    }
+    .action-btn:hover { background: var(--bg); }
+    .action-btn.primary {
+      background: var(--green-light);
+      color: var(--green);
+      border-color: transparent;
+    }
+    .action-btn.primary:hover { background: #c5eadc; }
+
+    .report-body {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+
+    /* HOW IT WORKS */
+    .how-section {
+      margin-top: 4rem;
+      text-align: center;
+    }
+    .how-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      margin-bottom: 0.5rem;
+    }
+    .how-section > p {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 2.5rem;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .step {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: left;
+    }
+    .step-num {
+      width: 32px; height: 32px;
+      background: var(--green-light);
+      color: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .step h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .step p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* FOOTER */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      .steps { grid-template-columns: 1fr; }
+      .hero { padding: 3rem 1.5rem 2.5rem; }
+      .card { padding: 1.5rem; }
+      .stats-row { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">Ontario Grant Finder</a>
+  <span class="nav-badge">2026 Programs</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Free personalized report</div>
+  <h1>Find every grant your Ontario business qualifies for</h1>
+  <p>252+ provincial and federal programs. Most business owners leave thousands on the table. Find out what's yours in seconds.</p>
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-num">252+</span>
+      <span class="stat-label">Active programs</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">$1M+</span>
+      <span class="stat-label">Max available</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">4–9</span>
+      <span class="stat-label">Avg. matches found</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">60s</span>
+      <span class="stat-label">To your report</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="card">
+    <div class="card-title">Tell us about your business</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="biz-type">Business type *</label>
+        <select id="biz-type">
+          <option value="">Select...</option>
+          <option>Trades / Contractor</option>
+          <option>Healthcare / Regulated Profession</option>
+          <option>Retail</option>
+          <option>Restaurant / Food Service</option>
+          <option>Technology / Software</option>
+          <option>Manufacturing</option>
+          <option>Agriculture</option>
+          <option>Professional Services</option>
+          <option>Non-profit</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="structure">Business structure *</label>
+        <select id="structure">
+          <option value="">Select...</option>
+          <option>Sole proprietor</option>
+          <option>Incorporated (Ontario)</option>
+          <option>Incorporated (Federal)</option>
+          <option>Partnership</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="employees">Number of employees *</label>
+        <select id="employees">
+          <option value="">Select...</option>
+          <option>Just me (0)</option>
+          <option>1–4</option>
+          <option>5–19</option>
+          <option>20–99</option>
+          <option>100+</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="revenue">Annual revenue *</label>
+        <select id="revenue">
+          <option value="">Select...</option>
+          <option>Under $30,000</option>
+          <option>$30,000 – $100,000</option>
+          <option>$100,000 – $500,000</option>
+          <option>$500,000 – $2M</option>
+          <option>Over $2M</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="city">City / Region</label>
+        <input type="text" id="city" placeholder="e.g. Brampton, Ottawa, Hamilton" />
+      </div>
+      <div class="form-group">
+        <label for="years">Years in operation *</label>
+        <select id="years">
+          <option value="">Select...</option>
+          <option>Pre-launch / startup</option>
+          <option>Less than 1 year</option>
+          <option>1–3 years</option>
+          <option>3–10 years</option>
+          <option>10+ years</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label for="spending">What are you currently spending on or planning to invest in?</label>
+        <textarea id="spending" placeholder="e.g. hiring staff, new equipment, software, training, exporting, R&D, renovations..."></textarea>
+      </div>
+      <div class="form-group full">
+        <label for="owner-bg">Owner background (optional — unlocks diversity-specific grants)</label>
+        <select id="owner-bg">
+          <option value="">Prefer not to say</option>
+          <option>Woman-owned</option>
+          <option>Indigenous-owned</option>
+          <option>Newcomer / immigrant-owned</option>
+          <option>Youth-owned (under 35)</option>
+          <option>Racialized / visible minority-owned</option>
+          <option>None of the above</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="generate-btn" onclick="generateReport()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Find my grants
+    </button>
+
+    <div class="error-msg" id="error-msg"></div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <span>Analyzing your profile against 252+ Ontario and federal programs...</span>
+    </div>
+  </div>
+
+  <div class="report-card" id="report-card">
+    <div class="report-header">
+      <div>
+        <h2>Your grant report</h2>
+        <p id="report-subtitle"></p>
+      </div>
+      <div class="report-actions">
+        <button class="action-btn" onclick="window.print()">Print</button>
+        <button class="action-btn primary" onclick="copyReport()" id="copy-btn">Copy report</button>
+      </div>
+    </div>
+    <div class="report-body" id="report-body"></div>
+  </div>
+
+  <div class="how-section">
+    <h2>How it works</h2>
+    <p>Three steps to finding money you didn't know existed</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Fill in your profile</h3>
+        <p>Tell us about your business type, size, revenue, and what you're spending on. Takes under 2 minutes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>AI matches your programs</h3>
+        <p>Our system cross-references your profile against 252+ active Ontario and federal funding programs.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Get your report</h3>
+        <p>Receive a personalized list with amounts, eligibility, deadlines, and exactly where to apply.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Ontario Grant Finder · Updated for 2026 programs · Not affiliated with the Government of Ontario or Canada</p>
+</footer>
+
+<script>
+async function generateReport() {
+  const bizType = document.getElementById('biz-type').value;
+  const structure = document.getElementById('structure').value;
+  const employees = document.getElementById('employees').value;
+  const revenue = document.getElementById('revenue').value;
+  const city = document.getElementById('city').value.trim();
+  const years = document.getElementById('years').value;
+  const spending = document.getElementById('spending').value.trim();
+  const ownerBg = document.getElementById('owner-bg').value;
+
+  const errorEl = document.getElementById('error-msg');
+  errorEl.className = 'error-msg';
+
+  if (!bizType || !structure || !employees || !revenue || !years) {
+    errorEl.textContent = 'Please fill in all required fields before generating your report.';
+    errorEl.className = 'error-msg visible';
+    return;
+  }
+
+  const btn = document.getElementById('generate-btn');
+  btn.disabled = true;
+  document.getElementById('loading').className = 'loading visible';
+  document.getElementById('report-card').className = 'report-card';
+
+  const profile = `Business type: ${bizType}
+Business structure: ${structure}
+Number of employees: ${employees}
+Annual revenue: ${revenue}
+City/Region: ${city || 'Ontario (unspecified)'}
+Years in operation: ${years}
+Current spending / planned investments: ${spending || 'Not specified'}
+Owner background: ${ownerBg || 'Not specified'}`;
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ profile })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Server error');
+
+    document.getElementById('report-subtitle').textContent =
+      `Generated for: ${bizType} · ${city || 'Ontario'} · ${new Date().toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+    document.getElementById('report-body').textContent = data.report;
+    document.getElementById('report-card').className = 'report-card visible';
+    document.getElementById('report-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (err) {
+    errorEl.textContent = 'Something went wrong. Please try again in a moment.';
+    errorEl.className = 'error-msg visible';
+  } finally {
+    btn.disabled = false;
+    document.getElementById('loading').className = 'loading';
+  }
+}
+
+function copyReport() {
+  const text = document.getElementById('report-body').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy report'; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
