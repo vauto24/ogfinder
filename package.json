@@ -1,0 +1,6 @@
+{
+  "name": "ontario-grant-finder",
+  "version": "1.0.0",
+  "description": "Ontario small business grant finder",
+  "engines": { "node": "18.x" }
+}
